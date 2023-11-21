@@ -1,0 +1,17 @@
+﻿<!-- Index.razor -->
+@page "/"
+@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+
+<PageTitle>Godklasse - Hjem</PageTitle>
+
+<h1>Velkommen til min side!</h1>
+
+<button @onclick="NavigateToUserManagement">Gå til Brugeradministration</button>
+
+@code {
+    private void NavigateToUserManagement()
+    {
+        Navigation.NavigateTo("/usermanagement");
+    }
+}

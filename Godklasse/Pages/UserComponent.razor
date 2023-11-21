@@ -1,0 +1,95 @@
+﻿@page "/usermanagement"
+@inherits LayoutComponentBase
+@using DatingApp.Models;
+@using DatingApp.Services;
+
+<PageTitle>Godklasse - Brugeradministration</PageTitle>
+
+<h3>Brugeradministration</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Bruger ID</th>
+            <th>Brugernavn</th>
+            <th>Password</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in users)
+        {
+            <tr>
+                <td>@user.UserId</td>
+                <td>@user.UserName</td>
+                <td>@user.Password</td>
+                <td>
+                    <button @onclick="() => EditUser(user.UserId)">Rediger</button>
+                    <button @onclick="() => DeleteUser(user.UserId)">Slet</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <h4>Opret/Opdater Bruger</h4>
+    <form>
+        <label>Brugernavn:</label>
+        <input type="text" @bind="newUser.UserName" />
+        <br />
+        <label>Password:</label>
+        <input type="password" @bind="newUser.Password" />
+        <br />
+        <button @onclick="SaveUser">Gem</button>
+    </form>
+</div>
+
+@code {
+    private List<User> users;
+    private User newUser = new User();
+    private bool editing = false;
+    private int userIdToEdit;
+
+    private UserService userService = new UserService();
+
+    protected override void OnInitialized()
+    {
+        users = userService.GetUsers();
+    }
+
+    private void SaveUser()
+    {
+        if (editing)
+        {
+            var updatedUser = new User { UserId = userIdToEdit, UserName = newUser.UserName, Password = newUser.Password };
+            userService.UpdateUser(updatedUser);
+        }
+        else
+        {
+            userService.CreateUser(newUser);
+        }
+
+        newUser = new User(); // Nulstil inputfelter
+        editing = false;
+        users = userService.GetUsers(); // Opdater brugerliste
+    }
+
+    private void EditUser(int userId)
+    {
+        editing = true;
+        userIdToEdit = userId;
+        var userToEdit = users.FirstOrDefault(u => u.UserId == userId);
+        if (userToEdit != null)
+        {
+            newUser = new User { UserId = userToEdit.UserId, UserName = userToEdit.UserName, Password = userToEdit.Password };
+        }
+    }
+
+    private void DeleteUser(int userId)
+    {
+        userService.DeleteUser(userId);
+        users = userService.GetUsers(); // Opdater brugerliste
+    }
+}
+
