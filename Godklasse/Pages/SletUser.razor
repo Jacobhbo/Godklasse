@@ -1,0 +1,72 @@
+﻿@page "/Delete/{Id}"
+@using Godklasse.Pages
+@using Godklasse.Data
+@inject UserService userService
+@inject NavigationManager NavigationManager
+
+<h2>Delete Employee</h2>
+<hr />
+<h3>Are you sure want to delete this?</h3>
+
+<form>
+    <div class="row">
+        <div class=" col-md-8">
+            <div class="form-group">
+                <label>Employee Id:</label>
+                <label>@obj.UserId</label>
+            </div>
+            <div class="form-group">
+                <label>First Name:</label>
+                <label>@obj.UserName</label>
+            </div>
+            <div class="form-group">
+                <label>Middle Name:</label>
+                <label>@obj.Password</label>
+            </div>
+            <div class="form-group">
+                <label>Last Name:</label>
+                <label>@obj.Id</label>
+            </div>
+            <div class="form-group">
+                <label>Desigation:</label>
+                <label>@obj.Alder</label>
+            </div>
+            <div class="form-group">
+                <label>Gender:</label>
+                <label>@obj.Højde</label>
+            </div>
+            <div class="form-group">
+                <label>City:</label>
+                <label>@obj.Køn</label>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-danger" @onclick="@DeleteUser" value="Delete" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    User obj = new User();
+    protected override async Task OnInitializedAsync()
+    {
+        obj = await Task.Run(() => userService.GetUserById(Convert.ToInt32(Id)));
+    }
+    protected async void DeleteUser()
+    {
+        await userService.DeleteUser(obj);
+        NavigationManager.NavigateTo("/usermanagement");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/usermanagement");
+    }
+}

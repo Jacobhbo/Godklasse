@@ -1,0 +1,68 @@
+﻿@page "/AddUser"
+@using Godklasse.Pages
+@using Godklasse.Shared
+@using Godklasse.Data
+@inject UserService userService
+@inject NavigationManager NavigationManager
+
+
+<h2>Tilføj ny user</h2>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="FirstName" class="control-label"> Userid</label>
+                <input form="Name" class="form-control" @bind="@obj.Id" />
+            </div>
+            <div class="form-group">
+                <label for="FirstName" class="control-label"> Brugernavn</label>
+                <input for="FirstName" class="form-control" @bind="@obj.UserName" />
+            </div>
+            <div class="form-group">
+                <label for="MiddleName" class="control-label"> Password</label>
+                <input type="password" class="form-control" @bind="@obj.Password" />
+            </div>
+            <div class="form-group">
+                <label for="LastName" class="control-label"> Alder</label>
+                <input for="LastName" class="form-control" @bind="@obj.Alder" />
+            </div>
+
+            <div class="form-group">
+                <label for="Gender" class="control-label">Køn</label>
+                <select @bind="@obj.Køn" class="form-control">
+                    <option value="">-Vælg Køn</option>
+                    <option value="Male">Mand</option>
+                    <option value="Female">Kvinde</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Designation" class="control-label">Højde</label>
+                <input form="Designation" class="form-control" @bind="@obj.Højde" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateUser" value="Save" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    User obj = new User();
+    protected async void CreateUser()
+    {
+        await userService.InsertUser(obj);
+        NavigationManager.NavigateTo("/usermanagement");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/usermanagement");
+    }
+}

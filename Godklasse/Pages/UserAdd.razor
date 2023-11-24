@@ -1,0 +1,89 @@
+﻿@page "/usermanagement"
+@inherits LayoutComponentBase
+@using Godklasse.Shared;
+@using Godklasse.Pages;
+@using Godklasse.Data;
+@inject UserService UserService
+
+
+<PageTitle>Godklasse - Brugeradministration</PageTitle>
+
+<h3>Opret, Opdater og Slet konto</h3>
+
+<NavLink class="nav-link" href="AddUser">
+    <span class="oi oi-plus" aria-hidden="true">Add New User</span>
+</NavLink>
+
+<h1>User List</h1>
+
+@if (UserObj is null)
+{
+    <p><em>Loading.................</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    UserID
+                </th>
+
+                <th>
+                    Brugernavn
+                </th>
+
+                <th>
+                    Alder
+                </th>
+
+                <th>
+                    Højde
+                </th>
+                <th>
+                    Køn
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in UserObj)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Password</td>
+                    <td>@user.Id</td>
+                    <td>@user.Alder</td>
+                    <td>
+                        <a class="nav-link" href="EditUser/@user.Id">
+                            <span class="oi oi-pencil" aria-hidden="true">Edit</span>
+                        </a>
+                        <a class="nav-link" href="Slet/@user.Id">
+                            <span class="oi oi-trash" aria-hidden="true">Slet</span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    List<User> UserObj;
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserObj = await Task.Run(() => UserService.GetAllUsers());
+    }
+
+    private async Task InsertUser()
+    {
+       
+
+        // Opdater brugerlisten efter indsættelse
+        UserObj = await Task.Run(() => UserService.GetAllUsers());
+        StateHasChanged(); // Fortæl komponenten, at dens tilstand er ændret
+    }
+}

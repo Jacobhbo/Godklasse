@@ -3,15 +3,21 @@
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
 
-<PageTitle>Godklasse - Hjem</PageTitle>
+<PageTitle>DatingApp</PageTitle>
 
-<h1>Velkommen til min side!</h1>
+<h1>Velkommen til min DatingApp :)</h1>
 
-<button @onclick="NavigateToUserManagement">Gå til Brugeradministration</button>
+<button @onclick="NavigateToUserManagement">Opret, Opdater og Slet konto</button>
+<button @onclick="NavigateToLogin">Gå til Login</button>
 
 @code {
     private void NavigateToUserManagement()
     {
         Navigation.NavigateTo("/usermanagement");
+    }
+
+    private void NavigateToLogin()
+    {
+        Navigation.NavigateTo("/login");
     }
 }

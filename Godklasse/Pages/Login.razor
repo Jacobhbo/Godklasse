@@ -1,29 +1,32 @@
-﻿<!-- Login.razor -->
-@page "/login"
+﻿@page "/login"
+@using Godklasse.Pages;
+@using Godklasse.Data;
+@using Godklasse.Shared;
 @inherits LayoutComponentBase
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+
 
 <PageTitle>Log ind</PageTitle>
 
 <h3>Log ind</h3>
 
-<form>
-    <label>Brugernavn:</label>
-    <input type="text" @bind="username" />
-    <br />
-    <label>Password:</label>
-    <input type="password" @bind="password" />
-    <br />
-    <button @onclick="Login">Log ind</button>
-</form>
+<div class="form-group">
+    <label for="FirstName" class="control-label"> Brugernavn</label>
+    <input for="FirstName" class="form-control" @bind="@obj.UserName" />
+</div>
+<div class="form-group">
+    <label for="FirstName" class="control-label"> Password</label>
+    <input for="password" class="form-control" @bind="@obj.Password" />
+</div>
+
+<input type="button" class="btn btn-primary" @onclick="@LogInd" value="Login" />
 
 @code {
-    private string username;
-    private string password;
+    User obj = new User();
 
-    private void Login()
+    protected async void LogInd()
     {
-        // Implementer log ind-logik her
-        // Kontroller brugernavn og adgangskode mod din datakilde (f.eks. en database)
-        // Gem eventuelt brugerens indlogningstilstand (f.eks. i en brugerøget tilstand)
+        NavigationManager.NavigateTo("/usermanagement");
     }
 }
